@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Una invitación para Paola</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Archivo+Black&display=swap');
+
+  :root{
+    --pink:#ff2d95;
+    --cyan:#00e5ff;
+    --yellow:#ffd400;
+    --blue:#1b1f7a;
+    --bg:#0a0a1a;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--bg);
+    overflow:hidden;
+    font-family:'Archivo Black', sans-serif;
+  }
+
+  .halftone{
+    position:fixed; inset:0;
+    background-image:radial-gradient(rgba(255,255,255,0.08) 1.5px, transparent 1.5px);
+    background-size:14px 14px;
+    pointer-events:none;
+    z-index:1;
+    animation:driftDots 12s linear infinite;
+  }
+  @keyframes driftDots{ from{background-position:0 0;} to{background-position:140px 140px;} }
+
+  .webs{
+    position:fixed; inset:0; z-index:0; opacity:0.15; pointer-events:none;
+  }
+
+  .stage{
+    position:relative;
+    height:100%;
+    width:100%;
+    z-index:2;
+  }
+
+  .screen{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:24px;
+    opacity:0; visibility:hidden;
+    transition:opacity .5s ease;
+  }
+  .screen.active{ opacity:1; visibility:visible; }
+
+  /* ---------- INTRO ---------- */
+  #intro h1{
+    font-family:'Bangers', cursive;
+    font-size:clamp(2.2rem, 8vw, 4.5rem);
+    color:var(--yellow);
+    letter-spacing:2px;
+    margin:0 0 8px;
+    text-shadow:
+      3px 3px 0 var(--pink),
+      -3px -3px 0 var(--cyan);
+    animation:glitchTitle 2.5s infinite;
+  }
+  @keyframes glitchTitle{
+    0%,89%,100%{ transform:translate(0,0); filter:none; }
+    90%{ transform:translate(-2px,1px); filter:hue-rotate(20deg); }
+    92%{ transform:translate(2px,-1px); filter:hue-rotate(-20deg); }
+    94%{ transform:translate(-1px,0); }
+    96%{ transform:translate(0,0); filter:none; }
+  }
+
+  #intro p{ color:#eee; font-family:'Permanent Marker', cursive; font-size:1.1rem; max-width:340px; }
+
+  .spider-btn{
+    margin-top:24px;
+    background:var(--pink);
+    color:#fff;
+    border:4px solid var(--yellow);
+    border-radius:50%;
+    width:150px; height:150px;
+    font-family:'Bangers', cursive;
+    font-size:1.4rem;
+    cursor:pointer;
+    box-shadow:0 0 0 6px var(--blue), 0 0 30px var(--pink);
+    animation:pulse 1.6s ease-in-out infinite;
+    transition:transform .15s ease;
+  }
+  .spider-btn:active{ transform:scale(0.92); }
+  @keyframes pulse{ 0%,100%{transform:scale(1);} 50%{transform:scale(1.06);} }
+
+  /* ---------- INVITE ---------- */
+  #invite h2{
+    font-family:'Bangers', cursive;
+    font-size:clamp(1.8rem, 7vw, 3rem);
+    color:#fff;
+    text-shadow:2px 2px 0 var(--cyan), -2px -2px 0 var(--pink);
+    margin-bottom:6px;
+  }
+  #invite .sub{
+    font-family:'Permanent Marker', cursive;
+    color:var(--yellow);
+    margin-bottom:36px;
+    font-size:1.05rem;
+  }
+
+  .choices{
+    position:relative;
+    display:flex;
+    gap:24px;
+    width:min(90vw, 420px);
+    height:140px;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .btn{
+    font-family:'Bangers', cursive;
+    font-size:1.5rem;
+    letter-spacing:1px;
+    padding:16px 30px;
+    border-radius:14px;
+    border:none;
+    cursor:pointer;
+  }
+  .btn-yes{
+    background:var(--cyan);
+    color:#0a0a1a;
+    border:3px solid #fff;
+    box-shadow:0 0 22px var(--cyan);
+    animation:jelly 1.8s ease-in-out infinite;
+  }
+  @keyframes jelly{ 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+
+  .btn-no{
+    background:transparent;
+    color:#ff6b6b;
+    border:3px solid #ff6b6b;
+    position:absolute;
+    transition:transform .18s ease;
+  }
+
+  #dodgeNote{
+    margin-top:18px;
+    min-height:22px;
+    color:#ff9fc7;
+    font-family:'Permanent Marker', cursive;
+    font-size:.95rem;
+  }
+
+  /* ---------- SUCCESS ---------- */
+  #success h2{
+    font-family:'Bangers', cursive;
+    font-size:clamp(2.2rem, 9vw, 4rem);
+    color:var(--yellow);
+    text-shadow:3px 3px 0 var(--pink), -3px -3px 0 var(--cyan);
+  }
+  .card{
+    margin-top:18px;
+    background:rgba(255,255,255,0.06);
+    border:3px solid var(--cyan);
+    border-radius:16px;
+    padding:22px 26px;
+    max-width:360px;
+    color:#fff;
+    font-family:'Permanent Marker', cursive;
+    line-height:1.9;
+    font-size:1.05rem;
+  }
+  .card b{ color:var(--yellow); }
+
+  #success .note{
+    margin-top:20px;
+    color:#eee;
+    font-size:.95rem;
+    max-width:320px;
+    font-family:'Permanent Marker', cursive;
+  }
+
+  .mute-btn{
+    position:fixed;
+    top:14px; right:14px;
+    z-index:5;
+    background:rgba(255,255,255,0.1);
+    border:2px solid var(--cyan);
+    color:#fff;
+    border-radius:50%;
+    width:44px; height:44px;
+    font-size:1.1rem;
+    cursor:pointer;
+  }
+
+  .confetti{
+    position:fixed; top:-10px;
+    width:8px; height:8px;
+    z-index:4;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    to{ transform:translateY(110vh) rotate(360deg); opacity:0.9; }
+  }
+</style>
+</head>
+<body>
+
+<div class="halftone"></div>
+<svg class="webs" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+  <g stroke="#00e5ff" stroke-width="1" fill="none">
+    <circle cx="200" cy="200" r="40"/>
+    <circle cx="200" cy="200" r="90"/>
+    <circle cx="200" cy="200" r="150"/>
+    <circle cx="200" cy="200" r="220"/>
+    <line x1="200" y1="200" x2="0" y2="0"/>
+    <line x1="200" y1="200" x2="400" y2="0"/>
+    <line x1="200" y1="200" x2="0" y2="400"/>
+    <line x1="200" y1="200" x2="400" y2="400"/>
+    <line x1="200" y1="200" x2="200" y2="-20"/>
+    <line x1="200" y1="200" x2="200" y2="420"/>
+    <line x1="200" y1="200" x2="-20" y2="200"/>
+    <line x1="200" y1="200" x2="420" y2="200"/>
+  </g>
+</svg>
+
+<button class="mute-btn" id="muteBtn" title="silenciar">🔊</button>
+
+<div class="stage">
+
+  <div class="screen active" id="intro">
+    <h1>¿QUÉ ONDA, HERMOSA?</h1>
+    <p>Tengo algo que preguntarte... toca la araña para empezar 🕸️</p>
+    <button class="spider-btn" id="startBtn">🕷️ TOCA<br>AQUÍ</button>
+  </div>
+
+  <div class="screen" id="invite">
+    <h2>HERMOSA...</h2>
+    <div class="sub">¿Quieres ir conmigo a ver<br>Spider-Man: Brand New Day?</div>
+    <div class="choices" id="choicesBox">
+      <button class="btn btn-yes" id="yesBtn">SÍ 🕸️</button>
+      <button class="btn btn-no" id="noBtn">no</button>
+    </div>
+    <div id="dodgeNote"></div>
+  </div>
+
+  <div class="screen" id="success">
+    <h2>¡SEEE! 🎉🕷️</h2>
+    <div class="card">
+      🎬 Peli: <b>Spider-Man: Brand New Day</b><br>
+      📅 Fecha: <b>30 de julio</b><br>
+      🕒 Hora: <b>9:00 pm</b><br>
+      📍 Lugar: <b>sorpresa... 🤫</b>
+    </div>
+    <div class="note">nos vemos ahí, no faltes 😄🍿</div>
+  </div>
+
+</div>
+
+<audio id="bgAudio" src="calling-spiderverse.mp3" loop></audio>
+
+<script>
+  const audio = document.getElementById('bgAudio');
+  const muteBtn = document.getElementById('muteBtn');
+  const screens = { intro: document.getElementById('intro'), invite: document.getElementById('invite'), success: document.getElementById('success') };
+
+  function showScreen(name){
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+  }
+
+  document.getElementById('startBtn').addEventListener('click', () => {
+    audio.volume = 0.7;
+    audio.play().catch(()=>{});
+    showScreen('invite');
+  });
+
+  muteBtn.addEventListener('click', () => {
+    audio.muted = !audio.muted;
+    muteBtn.textContent = audio.muted ? '🔇' : '🔊';
+  });
+
+  // dodging "no" button
+  const noBtn = document.getElementById('noBtn');
+  const box = document.getElementById('choicesBox');
+  const note = document.getElementById('dodgeNote');
+  const phrases = [
+    "jajaja no, inténtalo de nuevo",
+    "nop, esa no era la respuesta 😏",
+    "casi... pero no",
+    "el botón tiene reflejos de araña",
+    "ríndete, di que sí 🕷️"
+  ];
+  let dodgeCount = 0;
+
+  function dodge(){
+    const boxRect = box.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+    const maxX = boxRect.width - btnRect.width;
+    const maxY = boxRect.height - btnRect.height;
+    const x = Math.random() * maxX - maxX/2;
+    const y = Math.random() * maxY - maxY/2;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    dodgeCount++;
+    note.textContent = phrases[Math.min(dodgeCount-1, phrases.length-1)];
+  }
+
+  noBtn.addEventListener('mouseenter', dodge);
+  noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); dodge(); }, {passive:false});
+  noBtn.addEventListener('click', (e) => { e.preventDefault(); dodge(); });
+
+  document.getElementById('yesBtn').addEventListener('click', () => {
+    showScreen('success');
+    launchConfetti();
+  });
+
+  function launchConfetti(){
+    const colors = ['#ff2d95', '#00e5ff', '#ffd400', '#ffffff'];
+    for(let i=0; i<70; i++){
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random()*100 + 'vw';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration = (2 + Math.random()*2) + 's';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4500);
+    }
+  }
+</script>
+
+</body>
+</html>
